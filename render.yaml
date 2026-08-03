@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: blessmed
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: >
+      npm install --prefix frontend-react &&
+      npm run build --prefix frontend-react &&
+      npm install --prefix backend
+    startCommand: npm start --prefix backend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        sync: false
+      - key: ANTHROPIC_API_URL
+        sync: false
+      - key: STACKS_API_BASE
+        sync: false
+      - key: QUIZ_ENABLED
+        value: "true"
+      - key: ASSISTANT_ENABLED
+        value: "true"
+    # PORT is injected by Render automatically — server.js already reads
+    # process.env.PORT, so nothing to set here.
+    # CLIENT_ORIGIN is only needed if the frontend is ever split off to a
+    # separate service — this Blueprint serves both from the one service,
+    # so it's left unset (server.js's `|| "*"` fallback covers it).

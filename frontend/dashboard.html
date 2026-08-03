@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — BlessMed</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=4" />
+</head>
+<body class="has-bottom-nav">
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bless<span class="dot">Med</span></a>
+    <input type="checkbox" id="nav-toggle-0" class="nav-toggle" />
+    <label for="nav-toggle-0" class="nav-toggle-label" aria-label="Menu"><span></span></label>
+    <div class="nav-links">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="reminders.html">Reminders</a>
+      <a href="steps.html">Steps</a>
+      <a href="checkin.html">Check-in</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="assistant.html">Assistant</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" onclick="Auth.logout()">Log out</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 id="greeting">Welcome back</h2>
+
+    <div class="points-hero">
+      <div>
+        <p class="points-hero-label">Total points</p>
+        <p class="points-hero-total" id="points-total">0</p>
+        <p class="points-hero-conversion">≈ <strong id="points-bmed">0.00</strong> BMed at future airdrop</p>
+      </div>
+      <div class="points-hero-rate">100 points = 1 BMed. Points keep accruing from steps, check-ins and quizzes — BMed is credited at the airdrop.</div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:20px;">
+      <div class="card">
+        <h3>Health snapshot</h3>
+        <div id="profile-summary"></div>
+        <a href="profile.html" class="btn btn-outline" style="margin-top:10px;">Edit profile</a>
+      </div>
+      <div class="card">
+        <h3>Steps today</h3>
+        <div id="steps-summary"></div>
+        <a href="steps.html" class="btn btn-outline" style="margin-top:10px;">Open steps</a>
+      </div>
+      <div class="card">
+        <h3>Daily check-in</h3>
+        <div id="checkin-summary"></div>
+        <a href="checkin.html" class="btn btn-outline" style="margin-top:10px;">Check in</a>
+      </div>
+      <div class="card">
+        <h3>Daily quiz</h3>
+        <div id="quiz-summary"></div>
+        <a href="quiz.html" class="btn btn-outline" style="margin-top:10px;">Take today's quiz</a>
+      </div>
+    </div>
+
+    <h3>Health tips for you</h3>
+    <div class="grid grid-2" id="tips-feed"></div>
+  </div>
+
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class="active"><span class="icon">🏠</span>Home</a>
+    <a href="steps.html" class=""><span class="icon">👣</span>Steps</a>
+    <a href="reminders.html" class=""><span class="icon">💊</span>Meds</a>
+    <a href="checkin.html" class=""><span class="icon">📝</span>Check-in</a>
+    <a href="profile.html" class=""><span class="icon">👤</span>Profile</a>
+  </nav>
+
+  <script src="js/api.js?v=3"></script>
+  <script src="js/notify.js?v=2"></script>
+  <script src="js/dashboard.js?v=3"></script>
+  <script src="js/popups.js?v=2"></script>
+</body>
+</html>

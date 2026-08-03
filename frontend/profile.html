@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Profile — BlessMed</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=4" />
+</head>
+<body class="has-bottom-nav">
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bless<span class="dot">Med</span></a>
+    <input type="checkbox" id="nav-toggle-5" class="nav-toggle" />
+    <label for="nav-toggle-5" class="nav-toggle-label" aria-label="Menu"><span></span></label>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="reminders.html">Reminders</a>
+      <a href="steps.html">Steps</a>
+      <a href="checkin.html">Check-in</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="assistant.html">Assistant</a>
+      <a href="profile.html" class="active">Profile</a>
+      <a href="#" onclick="Auth.logout()">Log out</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="alert-box"></div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="flex-between" style="margin-bottom:16px;">
+          <img id="avatar-img" class="avatar" src="" alt="Profile picture" />
+          <div>
+            <label class="btn btn-outline" for="picture-input" style="cursor:pointer;">Change photo</label>
+            <input type="file" id="picture-input" accept="image/*" hidden />
+          </div>
+        </div>
+
+        <form id="profile-form">
+          <div class="field-row">
+            <div>
+              <label for="firstName">First name</label>
+              <input type="text" id="firstName" required />
+            </div>
+            <div>
+              <label for="lastName">Last name</label>
+              <input type="text" id="lastName" required />
+            </div>
+          </div>
+          <div>
+            <label for="otherNames">Other names <span class="muted">(optional)</span></label>
+            <input type="text" id="otherNames" />
+          </div>
+          <div class="field-row">
+            <div>
+              <label for="age">Age</label>
+              <input type="number" id="age" min="0" max="130" />
+            </div>
+            <div>
+              <label for="bloodGroup">Blood group</label>
+              <select id="bloodGroup">
+                <option>Unknown</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label for="genotype">Genotype</label>
+            <select id="genotype">
+              <option>Unknown</option>
+              <option>AA</option><option>AS</option><option>SS</option>
+              <option>AC</option><option>SC</option>
+            </select>
+          </div>
+          <div>
+            <label for="allergies">Allergies <span class="muted">(comma separated)</span></label>
+            <input type="text" id="allergies" placeholder="Penicillin, Peanuts" />
+          </div>
+          <div>
+            <label for="medicalConditions">Medical conditions <span class="muted">(comma separated)</span></label>
+            <input type="text" id="medicalConditions" placeholder="Asthma, Hypertension" />
+          </div>
+
+          <h3 style="margin-bottom:0;">Emergency contact</h3>
+          <div class="field-row">
+            <div>
+              <label for="emergencyName">Name</label>
+              <input type="text" id="emergencyName" />
+            </div>
+            <div>
+              <label for="emergencyPhone">Phone</label>
+              <input type="tel" id="emergencyPhone" />
+            </div>
+          </div>
+          <div>
+            <label for="emergencyRelationship">Relationship</label>
+            <input type="text" id="emergencyRelationship" placeholder="Spouse, Parent, Sibling..." />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save profile</button>
+        </form>
+      </div>
+
+      <div>
+        <div class="card qr-box" style="margin-bottom:20px;">
+          <h3>Emergency QR code</h3>
+          <p class="muted">First responders can scan this to see your blood group, allergies, and emergency contact — no login required.</p>
+          <img id="qr-img" src="" alt="Emergency QR code" />
+        </div>
+
+        <div class="card">
+          <h3>Stacks wallet <span class="tag">testnet</span></h3>
+          <p class="muted">Connect a Stacks wallet (Leather or Xverse) to link your account for future on-chain record verification and rewards.</p>
+          <div id="wallet-connected-state" style="display:none;">
+            <p><strong>Connected:</strong> <span id="wallet-address" class="muted"></span></p>
+            <p id="wallet-balance" class="muted"></p>
+            <button id="disconnect-wallet-btn" class="btn btn-outline">Disconnect wallet</button>
+          </div>
+          <div id="wallet-disconnected-state">
+            <button id="connect-wallet-btn" class="btn btn-primary">Connect wallet</button>
+            <p class="muted" style="margin-top:8px;">Requires a Stacks wallet browser extension installed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class=""><span class="icon">🏠</span>Home</a>
+    <a href="steps.html" class=""><span class="icon">👣</span>Steps</a>
+    <a href="reminders.html" class=""><span class="icon">💊</span>Meds</a>
+    <a href="checkin.html" class=""><span class="icon">📝</span>Check-in</a>
+    <a href="profile.html" class="active"><span class="icon">👤</span>Profile</a>
+  </nav>
+
+  <script src="js/api.js?v=2"></script>
+  <script src="js/notify.js?v=2"></script>
+  <script type="module" src="js/stacks.js?v=2"></script>
+  <script src="js/profile.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Steps — BlessMed</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=4" />
+</head>
+<body class="has-bottom-nav">
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bless<span class="dot">Med</span></a>
+    <input type="checkbox" id="nav-toggle-1" class="nav-toggle" />
+    <label for="nav-toggle-1" class="nav-toggle-label" aria-label="Menu"><span></span></label>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="reminders.html">Reminders</a>
+      <a href="steps.html" class="active">Steps</a>
+      <a href="checkin.html">Check-in</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="assistant.html">Assistant</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" onclick="Auth.logout()">Log out</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="alert-box"></div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Today</h3>
+        <div style="text-align:center; margin:10px 0;">
+          <div style="font-size:2.4rem; font-weight:700; color:var(--color-primary-dark);" id="steps-today">0</div>
+          <div class="muted">of <span id="steps-goal">5,000</span> steps</div>
+        </div>
+        <div style="background:#e5e7eb; border-radius:999px; height:14px; overflow:hidden;">
+          <div id="progress-bar" style="background:var(--color-primary); height:100%; width:0%; transition:width 0.3s;"></div>
+        </div>
+        <p class="muted" style="text-align:right;" id="progress-pct">0%</p>
+
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button id="start-tracking-btn" class="btn btn-primary">Start automatic tracking</button>
+          <button id="stop-tracking-btn" class="btn btn-outline" style="display:none;">Stop tracking</button>
+        </div>
+        <p class="muted" id="tracking-status" style="margin-top:8px;">Tracking is off.</p>
+        <p class="muted" style="font-size:0.8rem;">Uses your device's motion sensor to count steps automatically while this page is open. Works best on a phone. A "Connect Google Fit" option is coming soon for background tracking.</p>
+      </div>
+
+      <div class="card">
+        <h3>Progress</h3>
+        <p><strong>🔥 Streak:</strong> <span id="step-streak">0</span> day(s) hitting your goal</p>
+        <p><strong>🎁 Points earned:</strong> <span id="step-points">0</span> <span class="muted">(counts toward your future BMed token balance)</span></p>
+        <p><strong>📅 Last 7 days total:</strong> <span id="weekly-total">0</span> steps</p>
+        <p><strong>👣 Lifetime steps:</strong> <span id="lifetime-steps">0</span></p>
+
+        <form id="goal-form" style="margin-top:16px;">
+          <label for="goal-input">Daily step goal</label>
+          <div style="display:flex; gap:10px;">
+            <input type="number" id="goal-input" min="500" step="500" />
+            <button type="submit" class="btn btn-outline" style="white-space:nowrap;">Save goal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>Milestones <span class="tag">BMed token</span></h3>
+      <p class="muted">Lifetime step milestones earn bonus points. Points are the foundation for the future BMed token — the more you walk, the more you'll have when it launches.</p>
+      <div id="milestones-list" class="grid grid-3"></div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>Last 7 days</h3>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class=""><span class="icon">🏠</span>Home</a>
+    <a href="steps.html" class="active"><span class="icon">👣</span>Steps</a>
+    <a href="reminders.html" class=""><span class="icon">💊</span>Meds</a>
+    <a href="checkin.html" class=""><span class="icon">📝</span>Check-in</a>
+    <a href="profile.html" class=""><span class="icon">👤</span>Profile</a>
+  </nav>
+
+  <script src="js/api.js?v=2"></script>
+  <script src="js/notify.js?v=2"></script>
+  <script src="js/steps.js?v=2"></script>
+  <script src="js/steps-page.js?v=2"></script>
+</body>
+</html>

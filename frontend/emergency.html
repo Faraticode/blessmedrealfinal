@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emergency Info — BlessMed</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=4" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bless<span class="dot">Med</span></a>
+  </nav>
+
+  <div class="container" style="max-width:520px;">
+    <div class="card">
+      <h2 style="margin-top:0;">🚑 Emergency Health Info</h2>
+      <div id="content"><p class="muted">Loading...</p></div>
+    </div>
+  </div>
+
+  <script src="js/api.js?v=2"></script>
+  <script>
+    (async () => {
+      const id = new URLSearchParams(window.location.search).get("id");
+      const el = document.getElementById("content");
+      if (!id) {
+        el.innerHTML = `<p class="alert alert-error">No QR code ID provided.</p>`;
+        return;
+      }
+      try {
+        const { info } = await apiRequest(`/profile/emergency/${id}`);
+        el.innerHTML = `
+          <p><strong>Name:</strong> ${info.name}</p>
+          <p><strong>Blood group:</strong> ${info.bloodGroup}</p>
+          <p><strong>Genotype:</strong> ${info.genotype}</p>
+          <p><strong>Allergies:</strong> ${info.allergies?.length ? info.allergies.join(", ") : "None on file"}</p>
+          <p><strong>Medical conditions:</strong> ${info.medicalConditions?.length ? info.medicalConditions.join(", ") : "None on file"}</p>
+          <hr />
+          <p><strong>Emergency contact:</strong><br/>
+            ${info.emergencyContact?.name || "Not provided"}
+            ${info.emergencyContact?.relationship ? `(${info.emergencyContact.relationship})` : ""}
+            <br/>
+            ${info.emergencyContact?.phone ? `<a href="tel:${info.emergencyContact.phone}">${info.emergencyContact.phone}</a>` : ""}
+          </p>
+        `;
+      } catch (err) {
+        el.innerHTML = `<p class="alert alert-error">${err.message}</p>`;
+      }
+    })();
+  </script>
+</body>
+</html>

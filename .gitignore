@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Frontend build output — Render builds this fresh each deploy
+frontend-react/dist/
+
+# Uploaded files are not committed — see the ephemeral-storage note in
+# RENDER_DEPLOY.md before relying on backend/uploads in production
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+*.log
+.DS_Store

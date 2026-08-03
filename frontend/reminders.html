@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Medication Reminders — BlessMed</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=4" />
+</head>
+<body class="has-bottom-nav">
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bless<span class="dot">Med</span></a>
+    <input type="checkbox" id="nav-toggle-2" class="nav-toggle" />
+    <label for="nav-toggle-2" class="nav-toggle-label" aria-label="Menu"><span></span></label>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="reminders.html" class="active">Reminders</a>
+      <a href="steps.html">Steps</a>
+      <a href="checkin.html">Check-in</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="assistant.html">Assistant</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" onclick="Auth.logout()">Log out</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="alert-box"></div>
+
+    <div id="notif-permission-banner" class="card" style="display:none; margin-bottom:20px; background:#fffbeb; border-color:#fde68a;">
+      <div class="flex-between">
+        <p style="margin:0;">Enable browser notifications so reminders can alert you while BlessMed is open.</p>
+        <button id="enable-notif-btn" class="btn btn-primary" style="white-space:nowrap;">Enable notifications</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <h3>Add a reminder</h3>
+      <form id="reminder-form">
+        <div class="field-row">
+          <div>
+            <label for="medication-name">Medication</label>
+            <input type="text" id="medication-name" placeholder="e.g. Paracetamol" required />
+          </div>
+          <div>
+            <label for="dosage">Dosage <span class="muted">(optional)</span></label>
+            <input type="text" id="dosage" placeholder="e.g. 500mg, 2 tablets" />
+          </div>
+        </div>
+
+        <div>
+          <label>Times</label>
+          <div id="times-container">
+            <div class="field-row time-row">
+              <input type="time" class="reminder-time" required />
+              <button type="button" class="btn btn-outline" onclick="this.parentElement.remove()">Remove</button>
+            </div>
+          </div>
+          <button type="button" id="add-time-btn" class="btn btn-outline" style="margin-top:8px;">+ Add another time</button>
+        </div>
+
+        <div>
+          <label>Days <span class="muted">(leave all unchecked for every day)</span></label>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="0" style="width:auto;" /> Sun</label>
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="1" style="width:auto;" /> Mon</label>
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="2" style="width:auto;" /> Tue</label>
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="3" style="width:auto;" /> Wed</label>
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="4" style="width:auto;" /> Thu</label>
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="5" style="width:auto;" /> Fri</label>
+            <label style="font-weight:400;"><input type="checkbox" class="day-checkbox" value="6" style="width:auto;" /> Sat</label>
+          </div>
+        </div>
+
+        <div>
+          <label for="reminder-notes">Notes <span class="muted">(optional)</span></label>
+          <input type="text" id="reminder-notes" placeholder="e.g. Take with food" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add reminder</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Your reminders</h3>
+      <div id="reminders-list"></div>
+    </div>
+  </div>
+
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class=""><span class="icon">🏠</span>Home</a>
+    <a href="steps.html" class=""><span class="icon">👣</span>Steps</a>
+    <a href="reminders.html" class="active"><span class="icon">💊</span>Meds</a>
+    <a href="checkin.html" class=""><span class="icon">📝</span>Check-in</a>
+    <a href="profile.html" class=""><span class="icon">👤</span>Profile</a>
+  </nav>
+
+  <script src="js/api.js?v=2"></script>
+  <script src="js/notify.js?v=2"></script>
+  <script src="js/reminders.js?v=2"></script>
+</body>
+</html>

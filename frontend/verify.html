@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verify your email — BlessMed</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=4" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bless<span class="dot">Med</span></a>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="card auth-card">
+      <h2>Verify your email</h2>
+      <p class="muted" id="verify-subtitle">We've sent a 6-digit code to your email.</p>
+      <div id="alert-box"></div>
+      <form id="verify-form">
+        <div>
+          <label for="otp">Verification code</label>
+          <input type="text" id="otp" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="000000" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Verify account</button>
+      </form>
+      <p class="switch">
+        Didn't get a code?
+        <a href="#" id="resend-link">Resend code</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/api.js?v=2"></script>
+  <script src="js/verify.js?v=2"></script>
+</body>
+</html>
