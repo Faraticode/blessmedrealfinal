@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("profile-form").addEventListener("submit", saveProfile);
   document.getElementById("picture-input").addEventListener("change", uploadPicture);
-  document.getElementById("connect-wallet-btn").addEventListener("click", handleConnectWallet);
+  document.getElementById("connect-wallet-leather-btn").addEventListener("click", () => handleConnectWallet("leather"));
+  document.getElementById("connect-wallet-xverse-btn").addEventListener("click", () => handleConnectWallet("xverse"));
   document.getElementById("disconnect-wallet-btn").addEventListener("click", handleDisconnectWallet);
 });
 
@@ -134,10 +135,13 @@ async function loadWalletBalance() {
   }
 }
 
-function handleConnectWallet() {
-  const btn = document.getElementById("connect-wallet-btn");
+function handleConnectWallet(providerId) {
+  const btn = document.getElementById(
+    providerId === "xverse" ? "connect-wallet-xverse-btn" : "connect-wallet-leather-btn"
+  );
   btn.disabled = true;
   window.BlessMedStacks.connectStacksWallet({
+    providerId,
     onSuccess: (user) => {
       Auth.setUser(user);
       showAlert("alert-box", "Wallet connected.", "success");

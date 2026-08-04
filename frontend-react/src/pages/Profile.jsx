@@ -139,10 +139,10 @@ export default function Profile() {
     }
   }
 
-  async function handleConnectWallet() {
+  async function handleConnectWallet(providerId) {
     setWalletBusy(true);
     try {
-      const fresh = await connectStacksWallet();
+      const fresh = await connectStacksWallet(providerId);
       setUser(fresh);
       setStatus({ message: "Wallet connected.", type: "success" });
     } catch (err) {
@@ -296,11 +296,24 @@ export default function Profile() {
               </div>
             ) : (
               <div>
-                <button className="btn btn-primary" disabled={walletBusy} onClick={handleConnectWallet}>
-                  Connect wallet
-                </button>
+                <div className="flex-between" style={{ gap: 8 }}>
+                  <button
+                    className="btn btn-primary"
+                    disabled={walletBusy}
+                    onClick={() => handleConnectWallet("leather")}
+                  >
+                    Connect Leather
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    disabled={walletBusy}
+                    onClick={() => handleConnectWallet("xverse")}
+                  >
+                    Connect Xverse
+                  </button>
+                </div>
                 <p className="muted" style={{ marginTop: 8 }}>
-                  Requires a Stacks wallet browser extension installed.
+                  Requires the Leather or Xverse browser extension installed.
                 </p>
               </div>
             )}
