@@ -7,7 +7,8 @@ const OTP_EXPIRY_MINUTES = 10;
 
 const generateOtp = () => String(crypto.randomInt(100000, 999999)); // 6-digit code
 
-// @desc  Register new user — creates an unverified account and emails an OTP
+// @desc  Register new user — creates a verified account and logs them straight in.
+//        OTP email verification is disabled for now (Render free tier blocks SMTP).
 // @route POST /api/auth/signup
 const signup = async (req, res) => {
   try {
@@ -27,9 +28,13 @@ const signup = async (req, res) => {
       return res.status(409).json({ message: "An account with this email already exists" });
     }
 
-    const otp = generateOtp();
-    const otpExpiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
-
+    // Email verification is temporarily disabled: Render's free tier blocks
+    // outbound SMTP (ports 25/465/587), so nodemailer can never reach Gmail
+    // from there. Accounts are auto-verified at signup instead. To bring
+    // OTP verification back, restore the otp/otpExpiresAt fields below,
+    // set isVerified back to false, and re-add the sendOtpEmail call
+    // (ideally switched to an HTTP-based provider like Resend/SendGrid,
+    // since SMTP won't work on Render's free tier regardless).
     const user = await User.create({
       firstName,
       lastName,
@@ -38,28 +43,13 @@ const signup = async (req, res) => {
       password,
       walletAddress: walletAddress || null,
       qrCodeId: crypto.randomBytes(8).toString("hex"),
-      isVerified: false,
-      otpCode: otp,
-      otpExpiresAt,
+      isVerified: true,
     });
 
-    try {
-      await sendOtpEmail({ to: user.email, otp, firstName: user.firstName });
-    } catch (emailErr) {
-      console.error("EMAIL SEND ERROR:", emailErr);
-      // Roll back the created account if we couldn't send the verification email,
-      // so the person can retry signup cleanly instead of being stuck unverified.
-      await User.findByIdAndDelete(user._id);
-      return res.status(500).json({
-        message: "Could not send verification email. Please try again.",
-        error: emailErr.message,
-      });
-    }
+    const token = generateToken(user._id);
+    user.password = undefined;
 
-    res.status(201).json({
-      message: "Account created. Enter the 6-digit code we emailed you to verify your account.",
-      email: user.email,
-    });
+    res.status(201).json({ user, token });
   } catch (err) {
     res.status(500).json({ message: "Signup failed", error: err.message });
   }

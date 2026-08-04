@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 const EMPTY_FORM = { firstName: "", lastName: "", otherNames: "", email: "", password: "", wallet: "" };
 
 export default function Signup() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState(EMPTY_FORM);
   const [error, setError] = useState("");
@@ -36,8 +36,8 @@ export default function Signup() {
           walletAddress: form.wallet.trim() || undefined,
         },
       });
-      sessionStorage.setItem("blessmed_verify_email", data.email);
-      navigate(`/verify?email=${encodeURIComponent(data.email)}`);
+      login(data.token, data.user);
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {

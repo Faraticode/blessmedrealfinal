@@ -51,8 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
           method: "POST",
           body: { firstName, lastName, otherNames, email, password, walletAddress },
         });
-        sessionStorage.setItem("blessmed_verify_email", data.email);
-        window.location.href = `verify.html?email=${encodeURIComponent(data.email)}`;
+        Auth.setToken(data.token);
+        Auth.setUser(data.user);
+        window.location.href = "dashboard.html";
       } catch (err) {
         showAlert("alert-box", err.message);
       } finally {
