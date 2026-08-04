@@ -313,7 +313,7 @@ export default function Profile() {
                   </button>
                 </div>
                 <p className="muted" style={{ marginTop: 8 }}>
-                  Requires the Leather or Xverse browser extension installed.
+                  Desktop: install the Leather or Xverse browser extension. Mobile: open this site inside the Xverse (or Leather) in-app browser — the regular phone browser cannot reach the wallet.
                 </p>
               </div>
             )}
