@@ -15,6 +15,10 @@ function yesterdayString(dateStr) {
 
 const POINTS_PER_GOAL_DAY = 10;
 
+// Conversion rate: every STEPS_PER_POINT steps walked earns 1 point.
+// Points accrue toward the future BMed token airdrop.
+const STEPS_PER_POINT = 1000; // 1,000 steps = 1 point
+
 // Lifetime step milestones. Points earned here (like all `points` on User)
 // accrue toward the future BMed token — this is just the schedule for how
 // fast they add up as a user walks more over time.
@@ -46,26 +50,38 @@ function applyGoalLogic(user, date, steps) {
 }
 
 /**
- * Adds `delta` to the user's lifetime step total and awards any newly
- * crossed milestone(s). Mutates `user` in place; caller is responsible for
- * saving. Milestones are one-time — `stepMilestonesReached` guards against
- * re-awarding on subsequent syncs.
+ * Adds `delta` to the user's lifetime step total, awards continuous
+ * conversion-rate points (STEPS_PER_POINT steps = 1 point), and awards any
+ * newly crossed milestone(s). Mutates `user` in place; caller is responsible
+ * for saving. Conversion points are derived from totalStepsLifetime so
+ * remainders carry forward and re-syncs never double-count. Milestones are
+ * one-time — `stepMilestonesReached` guards against re-awarding.
  */
 function applyMilestoneLogic(user, delta) {
-  if (delta <= 0) return [];
+  if (delta <= 0) return { newlyReached: [], pointsFromSteps: 0 };
 
-  user.totalStepsLifetime += delta;
+  const oldTotal = user.totalStepsLifetime || 0;
+  user.totalStepsLifetime = oldTotal + delta;
+
+  // Continuous conversion: every STEPS_PER_POINT steps = 1 point
+  const oldConversionPoints = Math.floor(oldTotal / STEPS_PER_POINT);
+  const newConversionPoints = Math.floor(user.totalStepsLifetime / STEPS_PER_POINT);
+  const pointsFromSteps = newConversionPoints - oldConversionPoints;
+  if (pointsFromSteps > 0) {
+    user.points += pointsFromSteps;
+  }
+
   const newlyReached = [];
-
   for (const milestone of STEP_MILESTONES) {
-    const alreadyReached = user.stepMilestonesReached.includes(milestone.threshold);
+    const alreadyReached = (user.stepMilestonesReached || []).includes(milestone.threshold);
     if (!alreadyReached && user.totalStepsLifetime >= milestone.threshold) {
+      user.stepMilestonesReached = user.stepMilestonesReached || [];
       user.stepMilestonesReached.push(milestone.threshold);
       user.points += milestone.points;
       newlyReached.push(milestone);
     }
   }
-  return newlyReached;
+  return { newlyReached, pointsFromSteps };
 }
 
 function buildMilestoneView(user) {
@@ -102,7 +118,7 @@ const upsertTodaySteps = async (req, res) => {
 
     const user = req.user;
     applyGoalLogic(user, date, finalSteps);
-    const newMilestones = applyMilestoneLogic(user, delta);
+    const { newlyReached: newMilestones, pointsFromSteps } = applyMilestoneLogic(user, delta);
     await user.save();
 
     res.json({
@@ -110,7 +126,9 @@ const upsertTodaySteps = async (req, res) => {
       goalMet: finalSteps >= user.dailyStepGoal,
       stepStreak: user.stepStreak,
       points: user.points,
+      pointsFromSteps, // points earned from the step conversion rate this update
       newMilestones,
+      conversionRate: { stepsPerPoint: STEPS_PER_POINT },
     });
   } catch (err) {
     res.status(400).json({ message: "Failed to record steps", error: err.message });
@@ -128,6 +146,9 @@ const getSummary = async (req, res) => {
 
   const weeklyTotal = weekEntries.reduce((sum, e) => sum + e.steps, 0);
 
+  const totalSteps = req.user.totalStepsLifetime || 0;
+  const pointsFromConversion = Math.floor(totalSteps / STEPS_PER_POINT);
+
   res.json({
     today: {
       date,
@@ -136,9 +157,14 @@ const getSummary = async (req, res) => {
     },
     stepStreak: req.user.stepStreak,
     points: req.user.points,
+    pointsFromSteps: pointsFromConversion, // total points earned purely from the conversion rate
     weeklyTotal,
     history: weekEntries.reverse(),
     milestones: buildMilestoneView(req.user),
+    conversionRate: {
+      stepsPerPoint: STEPS_PER_POINT,
+      description: `${STEPS_PER_POINT.toLocaleString()} steps = 1 point toward future BMed airdrop`,
+    },
   });
 };
 

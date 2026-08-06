@@ -144,8 +144,20 @@ export default function Steps() {
           </p>
           <p>
             <strong>🎁 Points earned:</strong> {summary.points}{" "}
-            <span className="muted">(counts toward your future BMed token balance)</span>
+            <span className="muted">(counts toward your future BMed token airdrop)</span>
           </p>
+          {summary.conversionRate && (
+            <p>
+              <strong>🔄 Conversion rate:</strong>{" "}
+              {summary.conversionRate.stepsPerPoint.toLocaleString()} steps = 1 point
+              {summary.pointsFromSteps != null && (
+                <span className="muted">
+                  {" "}
+                  · {summary.pointsFromSteps.toLocaleString()} pts from steps so far
+                </span>
+              )}
+            </p>
+          )}
           <p>
             <strong>📅 Last 7 days total:</strong> {summary.weeklyTotal.toLocaleString()} steps
           </p>
@@ -177,8 +189,9 @@ export default function Steps() {
           Milestones <span className="tag">BMed token</span>
         </h3>
         <p className="muted">
-          Lifetime step milestones earn bonus points. Points are the foundation for the future BMed token, the more
-          you walk, the more you'll have when it launches.
+          Every {summary.conversionRate?.stepsPerPoint?.toLocaleString() || "1,000"} steps you walk earns 1 point.
+          Lifetime milestones award extra bonus points on top. All points count toward the future BMed token airdrop —
+          the more you walk, the more you'll have when it launches.
         </p>
         <div className="grid grid-3">
           {allMilestones.length === 0 ? (
